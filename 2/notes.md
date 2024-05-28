@@ -82,6 +82,8 @@ and only take the things we care about, so no white spaces or comments
 * 2
 * ;
 
+each is a token?
+
 ### Parsing
 
 > The next step is **parsing**. This is hwere our syntax gets a **grammer**
@@ -294,3 +296,401 @@ is jvm bytecode a form of IR?
 could i make my own language front end that targets jvm IR?
 
 ### Optimization
+
+> Once we understand what the user's program means, we are free to swap it
+> out with a different program that has the
+> same *semantics* but implements them more
+> efficiently, we can **optimize** it
+
+what does it mean by semantics
+
+one example of optimizing is **constant folding**
+
+> if some expression always evaluates to the
+> exact same value, we can do the evaluation
+> at compile time and replace the code for
+> the expression with its result
+
+```
+pennyArea = 3.13159 * (0.75 /2) * (0.75 /2);
+```
+
+this would be optimized into
+
+```
+pennyArea = 0.441...
+```
+
+how much of a difference is this doing?
+
+> Optimization is a huge part of the programming
+> lanugage business.
+
+this is an easy example, but how do you know
+you are not breaking what the user intended?
+
+> Many successful languages have suprisingly
+> few compile-time optimizations. For example,
+> Lua and CPython generate relatively unoptimized code
+> and focus most of their performance effort on
+> the runtime
+
+premature optimization is "the root of all evil"
+
+what does this even mean
+
+* constant propagation
+* common subexpression elimination
+* loop invariant code motion
+* global value numbering
+* strength reduction
+* scalar replacement of aggregates
+* dead code elimination
+* loop unrolling
+
+### Code generation
+
+> The last step is converting it to a form
+> the machine can actually run.
+
+**generating code** like binary?
+
+> where "code" here usually refers to the kind
+> of primitive assembly-like instructions a CPU
+> runs and not the kind of "source code" a
+> human might want to read
+
+we are in the back end part
+
+> We have a decision to make
+
+> Do we generate instructions for a real CPU
+> or a virtual one?
+
+if you generate native machine code,
+its really fast but, its really complex
+and only works for that architecture and os?
+
+> Today's architectures have piles of
+> instructions, complex pipelines
+
+> your compiler is tied to a specific architecture
+
+> ducring the Cambrian explosion of computer
+> architectures, that lack of portability was
+> a real obstacle
+
+what is this Cambrian explosion ??
+
+so, if you want to build a computer language,
+you dont necesarily nead to know assembly for
+the architecture?
+
+could you really build a computer language just
+by converting source code to asm?
+
+I need to actually learn ASM one of these days
+
+* Martin Richards, BCPL
+* Niklaus Wirth, Pascal fame
+
+> they made their compilers produce virtual
+> machine code. Instead of instructions for
+> some real chip, they produce code for a
+> hypothetical, idealized machine. Wirth
+> called this **p-code** for portable, but
+> today we generally call it **bytecode**
+
+> because each instruction is often a single
+> byte long
+
+so is **bytecode** a form of IR?
+
+> These synthetic instructions are designed
+> to map a little more closely to the
+> language's semantics, and not be so tied
+> to the peculiarities of any one computer
+> architecture
+
+how is this different from a vm?
+
+### Virtual machine
+
+cpu cant understand the bytecode so what now?
+
+> You can write a little mini-compiler for each
+> target architecture that converts the bytecode
+> to native coe for that machine
+
+how is this different from a vm?
+
+> You are basically using your bytecode as an
+> intermediate representation
+
+you would still have to write a compiler for
+each architecture, but again as in IR you
+share alot of the front end stuff?
+
+> The basic principle here is that the
+> farther down the pipeline you push the
+> architecture-specific work, the more
+> of the earlier phases you can share across
+> architectures
+
+> Or you can write a **virtual machine (VM)**
+
+> a program that emulates a hypothetical chip supporting your
+> virtual architecture at runtime.
+
+> RUnning bytecode in a VM is slower than translating to native code
+> ahead of time because in a VM is slower than translating it to
+> native code ahead of time because every instruction must be simulated
+> at runtime each time it executes. In return you get simplicity and
+> portability
+
+> Implement your VM in, say C and you can run your language on any
+> platform that has a C compiler
+
+this is wahat we do with out second interpreter
+
+Is it really as easy as that? Different architectures wont affect the vm?
+
+*No because the vm is simulating a hypothetical chip.*
+
+### Runtime
+
+now we need to start up the VM and feed it the bytecode
+
+so **javac** takes source code and returns **bytecode**
+
+and **java** is the vm that takes in **bytecode**
+
+you can use ```javap -c javaprogram``` to look at the bytecode
+generated
+
+> for all but the basest of low-level languages, we usually
+> need some service that our language provides while the program
+> is running
+
+> if the language automatically manages memory, we need a **garbage collector**
+
+> if our language supports "instance of" test so you can see what kind
+> of object you have, then we need some representation to keep track of the type
+> of each object during execution
+
+what about staticaly typed languages, they dont have to check right?
+
+> All this stuff is going at runtime, so its called, appropriately **runtime**
+
+o wow look at this
+
+> In a fully compiled language, the code implementing the runtime gets
+> inesrted directly into the resulting executable.
+
+> In say **Go**, each compiled application has its own copy of
+> Go's runtime directly embedded in it.
+
+so in each go binary, there is the code of the program, but also its
+garbage collector?
+
+> If the language is run inside an interpreter or VM, then the runtime
+> lives there
+
+kinda confused on what an interpreter is now.
+
+### Shortcuts and Alternate Routes
+
+they are other ways of doing things
+
+#### Single-pass compilers
+
+back when computers were very limited in memory
+they would produce output code directly in the parser, without
+ever allocating any syntax trees or other IR's
+
+> You have no intermediate data structures to store global information
+> about the program
+
+> as soon as you see some expression, you need to know enough to
+> correctly compile it.
+
+* Pascal
+* C
+
+i think it goes on to say, thats why in C you needed to write
+function prototypes
+
+it does not say that actually pay attention
+
+> in C you can't call a function above the code that defines it
+> unless you have an explicit forward declaration
+
+so its saying you cant
+
+```
+int x = add(4, 10);
+
+int x(int a, int b){ return a + b}
+```
+
+no bueno, it does not know what add() is untill the next line, its going
+line by line, not parsing everything and going back to read the code?
+
+**Syntax-directed translation**, what is this?
+
+#### Tree-walk interpreters
+
+> Some programming languages executing code right after parsing it
+> to an AST (..). To run the program, the interpreter traverses the
+> syntax tree one branch and leaf at a time, evaluating each node
+> as it goes.
+
+this seems like fun
+
+> common for student projects and little languages
+
+tends to be slow
+
+> Some people use "interpreter" to mean only these kinds of implementations,
+> but others define that word more generally.
+
+> Our first interpreter rolls this way.
+
+neat
+
+Early versions of ruby wer tree walkers
+
+at ruby 1.9, they switched to YARV (Yet Another Ruby VM). YARV is a
+bytecode virtual machine
+
+so when you run any ruby programm. it generates the bytecode first then
+it begins running the bytecode thrue the vm?
+
+why in java you have to use javac, but in ruby theres no rubyc?
+
+#### Transpilers
+
+> Writing a complete back end for a language can be alot of work.
+
+> If you hae some existing IR to target, you could bolt your front end
+> onto that
+
+> What if you treated some other *source language* as if it were an
+> intermediate representation?
+
+So you would write the frontend for your language, then in
+the backend you would target another higher level language and use
+their back end.
+
+> They used to call this a **source to source compiler** or a
+> **transcompiler** or **transpiler**
+
+very popular because they wanted to, compile their language
+into javascript to run on the browser
+
+i have run into several transpilers like,
+
+Fennel https://fennel-lang.org/ | https://fennel-lang.org/see
+
+they target the lua vm?
+
+The first transpiler was written by Gary Kildall,
+very interesting fella. 8080asm to 8086asm,
+sea captain, business owner, licensed pilot and motorcyclist
+TV host, mysterious death
+
+> After the *viral* spread of UNIX to mahcines various
+> and sundry, there began a long tradition of compilers
+> that produced C as their output language.
+
+did not knew that
+
+they did this because C compilers were available everywhere
+
+and now the *new C* is javascript because everybody uses a browser
+
+> so these days it seems almost every language out there has a compiler
+> that targets JS since that's the main way to get your code running in
+> in a browser
+
+js is not the only way anymore **WebAssembly**
+
+programming languages target **webassembly** so that they can run
+in browser
+
+#### Just-in-time compilation
+
+**JIT**
+
+so you would have a jvm or runtime, an analyzer would look
+at the code, and decide to compile it some of it to native code for the architecture of the computer
+
+### Compilers and Interpreters
+
+back when first starting i thought
+
+compilers, took code and made an executable for your computer
+
+interpreters, is an executble that takes codes and runs it
+
+its correct but its not always so cut and dry
+
+what about a compiler that takes source and turns it to bytecode,
+and this bytecode is then feed into a vm? (like CPython?)
+
+From the user's perspective CPython is interpreted, but there is
+definitely some compiling going on.
+
+it can be both
+
+compilers
+
+* javac
+* gcc
+* rust
+* clang
+
+interpreter
+
+* MRI (Ruby)
+* jlox
+* php3
+
+both
+
+* C#
+* Haskell
+* CPython
+* Lua
+* Go
+* Scala
+
+i guess they are not many languages that are purely interpreted because
+it must be very slow?
+
+and *Go* is even weirder
+
+```go build``` compiles Go source code to machine code
+
+```go run``` it still compiles it but it runs it immediatly after only apearing
+to be interpreted
+
+So we will compile to bytecode and make a virtual machine for it?
+
+### Our Journey
+
+> Don't worry. This isn't the chapter where you're expected to *understand*
+> all of these pieces and parts
+
+### Challenges
+
+1. boring
+
+2. what reasons are there to not JIT?
+
+its complex, security concerns, and hard to predict performance?
+
+3. Most lisp implementations that compile to C also contain an interpreter
+that lets them execute lisp code on the fly as well. Why?
+
+My guess is so that they can use a REPL
