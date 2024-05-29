@@ -55,7 +55,10 @@ unreported exception IOException; must be caught or declared to be thrown
 so some functions, and throw, is that how this
 interpreter will handle, not being able to open file?
 
-yuh, ``` Exception in thread "main" java.nio.file.NoSuchFileException: file ```
+yuh,
+```
+Exception in thread "main" java.nio.file.NoSuchFileException: file
+```
 
 what about this byte business in, runFile()
 
@@ -291,4 +294,6 @@ why the sigma
 Lexer: error: cannot find symbol
  scanToken(); //yeah im defining it?, also cant find EOF
 
-this is kinda annoying tbh, i wont quite doe
+this is kinda annoying tbh, i wont quite doe,
+
+also not a fun of all this, oop "clean code" type shit type shit
