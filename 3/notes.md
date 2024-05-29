@@ -702,3 +702,63 @@ by the standard library
 wow this is alot of fun, i cant wait to make up my own language
 
 ### DESIGN NOTE: EXPRESSIONS AND STATEMENTS
+
+some languages, statements dont exist, only expressions
+
+> they treat declarations and control flow constructs
+> as expressions too.
+
+tend to have functional pedigrees
+
+* lisp
+* SML
+* Haskell
+* Ruby
+* CoffeeScript
+
+> To do that, for each "statement-like" construct
+> in the language, you need to decide what value
+> it evaluates to.
+
+some are easy
+
+* ```if``` statement, should  evaluate to what
+branch ends up being true, what if no ```else``` claus?
+
+just tried it in ruby, it returns nil
+
+* declaring a variable, evaluates to the value of the variable
+
+irb yes
+
+* a ```{block}``` evaluates to the last expression in seq
+
+yup
+
+rust is also expresion based
+
+```
+fn main() {
+  let x = {
+    println!("hi");
+    10 + 5
+  };
+
+  let y = if true {1} else {69};
+}
+```
+
+> Some get a little stranger. What should a loop
+> evaluate to
+
+never really liked the implicit returns but i
+now see why you would need them
+```let y = if true {1} else {69};``` this would
+be very annoying if you had to use ```return```
+for each value
+
+> If you aren't careful, your function will leak
+> a return value even if you only intend it to
+> produce a side effect,
+
+in practice most dont find it a problem
