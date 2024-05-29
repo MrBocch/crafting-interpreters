@@ -641,7 +641,7 @@ brew made things preetty simple
 ```
 brew install dart@2.12
 
-# now you have to unlink the previously installed version
+# now i had to unlink the previously installed version
 
 brew unlink dart@3.4 && brew unlink dart@2.12 && brew link dart@2.12
 ```
@@ -701,4 +701,4 @@ by the standard library
 
 wow this is alot of fun, i cant wait to make up my own language
 
-### DESIGN NOTE: EXPRESSIONS AND STATEMETNS
+### DESIGN NOTE: EXPRESSIONS AND STATEMENTS
