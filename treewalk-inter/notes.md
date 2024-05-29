@@ -29,8 +29,10 @@ so, **scanning** or **lexing** was to take
 source code, and take anything thats important
 we only want **tokens**
 
-```primary role is to transform a sequence of
-characters into a sequence of tokens```
+```
+primary role is to transform a sequence of
+characters into a sequence of tokens
+```
 
 > tokens, These are the meaningful "words" and
 > "punctuations" that make up the language's grammer
@@ -56,6 +58,7 @@ so some functions, and throw, is that how this
 interpreter will handle, not being able to open file?
 
 yuh,
+
 ```
 Exception in thread "main" java.nio.file.NoSuchFileException: file
 ```
