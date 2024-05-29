@@ -264,4 +264,441 @@ have bitwise or bit shifting, but modulo is genuinely useful
 print "hello world"
 ```
 
-> Baking *print* into the language
+> Baking *print* into the language instead of just making
+> it a core library function is a hack
+
+> But it's a useful hack for us it means our in-progress
+> interpreter can start producing output before we've
+> implemented all of the machinery required to define
+> functions, look them up by name, and call them
+
+wow never thought of that.
+
+**expression statement**
+
+You can pack a series of statements where a single one is
+expected using, the {} just like in rust
+
+### Variables
+
+Initialize variables with **var**
+
+```
+var a = "hi"
+var b;
+```
+
+so thats why not having nil is annoying.
+
+you could access the variable and also reasignet a different value with out the var thing
+
+but what if you did? i guess it would be the same shit right?
+
+### Control Flow
+
+So scheme has no buil-in looping constructs, dont remember
+using any loops in SICP. Was not so freaked out from this coming from learning some haskell, functional languages do everything thrue recursion
+
+but this is very interesting
+
+> Smalltalk has no built-in branching constructs, and relies
+> on dynamic dispatch for selectively executing code
+
+i cant imagine a language **with out** branching constructs
+
+pretty much the same syntax from C
+if/else, while(true), for(loops)
+
+why cant you have a for x in y loops?
+
+Theres alot of things i love from other languages, but they
+dont seemed to be implemented in lox, could i add them?
+
+> This is a concession I made because of how the implementation is split across chapters. A for-in loop needs some sort of **dynamic dispatch in the iterator protocol to handle different kinds of sequences**, but we don’t get that until after we’re done with control flow. We could circle back and add for-in loops later, but I didn’t think doing so would teach you anything super interesting.
+
+uhh *what?*, is it saying, you would need to do different
+things incase its a, string or array?
+
+are they even list in lox?
+
+### Functions
+
+unlike in ruby, or print you have to () the params
+
+```fun hi() {print "hi";}```
+
+if i wanted the no "()" like in ruby, would i have to
+change the parser?
+
+yeah i have been confused with this
+
+> Now's a good time to clarify some terminology. Some people
+> throw around "parameter" and "argument" like they are
+> interchangeable and, to many, they are. We're going to
+> spend a lot of time splitting the finest of downy hairs
+
+> An **argument** is an actual value you pass to a function
+> when you call it. So a function *call* has an **argument**
+> list. Sometimes you hear *actual parameter* used for these.
+
+> A **parameter** is a variable that holds the value of the
+> argument inside the body of the function. Thus, a function
+> declaration has a *paramter* list. Others call these
+> *formarl parameters* or simply *formals*
+
+so, they are **arguments** when you call a function
+
+and **parameter** when you define or declare function
+
+define'ing and declare'ing functions in C are different you because, its statically typed,
+
+> A declaration binds the function's type to its name so
+> that calls can be type-checked but does not provide a body
+
+lox is dynamically typed, so it checks at runtime, no need to declare it
+
+functions can return things
+
+if you dont return anything, then the function will return
+nil
+
+### Closures
+
+closures are anon functions? -> NO
+
+> Functions are first class in Lox
+
+they are treated as if they were anything else.
+
+> Since function declarations are statements, you can
+> declare local functions inside another function
+
+alot of stuff comes from lisp
+
+here it explains what a closure is
+
+```
+fun returnFunction() {
+    var outside = "outside";
+
+    fun inner(){
+        print outside;
+    }
+
+    return inner;
+}
+
+var fn = returnFunction()
+fn();
+}
+```
+
+> Here, *inner()* accesses a local variable declared outside
+> its body in the surrounding function. Is this kosher? Now
+> that lots of languages have borrewed this from Lisp, you
+> probably know the answer is yes.
+
+> For that to work inner() has to "hold on" to references to any surrounding
+> variables that it uses so that they stay around even
+> after the outer function has returned.
+
+> We call functions that do this **closures**
+
+thank you **Peter J. Landin**
+
+> he invented damn near half the terms in programming
+> languages. Most of them came out of one incredible paper,
+> **"The Next 700 Programming Languages"**
+
+how do you programm this?
+
+### Classes
+
+Lox is about halfway to being functional, but it will
+also be halfway object oriented
+
+#### Why might any language want to be object oriented?
+
+from what i understand, back then OOP was sold as
+the solution for everything, the silver bullet
+
+they can be very handy to group things together
+
+> If we can also hang methods off of those, then we
+> avoid the need to prefix all of our functions with
+> the name of the data type they operate on to
+> avoid **colliding** with similar functions for different
+> types
+
+> In say Racket, you end up having to name your functions like
+> ````hash-copy``` and ```vector-copy``` so that they dont
+> step on each other
+
+very annoying isse
+
+can you even have objects in a functional language?
+
+#### Why is Lox object oriented?
+
+every other language has support of oop
+
+#### Classes or prototypes
+
+i have heard of this before, Lua has prototype based objects?
+
+> When it comes to objects, there are actually two
+> approaches to them, **classes** and **prototypes**
+
+> In class-based languages, there are two core concepts
+> **instances** and **classes**
+
+> **Instances** store the state for each object and have
+> a reference to the instance class
+
+> **Classes** contain the methods and inheritance chain.
+
+so a class is the blue print, and a instance is the thing?
+atleast from what i understand when using a oop lang
+
+> To call a method on an instance, there is always a level
+> of indirection. You look up the instance's class and
+> then you find the method there
+
+> **Prototype-based** languages merge these two concepts
+
+> they are only objects, no classes, and each individual
+> object may contain state and methods
+
+> Objects can directly inherit from each other (or "delegate to") in prototypal lingo
+
+a little confussing, so the class also has state?
+
+> Do you know what people generally do with all the power
+> and flexibilty of prototypes? ... They use them to
+> reinvent classes.
+
+i dont get what makes prototypes so differnt
+
+people tend to prefer the class-based approach
+
+> Prototypes are simpler in the language
+
+> Larry Wall, Perl's inventor/prophet calls this the
+> "waterbed theory". Some complexity is essential and
+> cannot be eliminated. If you push it down in one place
+> it swells up in another
+
+hmm
+
+yeah, when i tried to use oop in lua, you either install
+a library or, (I got stuck trying to understand how to
+use metatables)
+
+#### Classes in Lox
+
+```
+class Breakfast {
+  cook() {
+    print "Eggs a-frying";
+  }
+
+  serve(who){
+    print "Enjoy your breakfast, " +who+ ".";
+  }
+}
+
+interesting that you dont have to call use ```fun```
+for methods
+
+```
+methods, what about attributes?
+
+> classes are first class in Lox
+
+how does that work?
+
+```
+// store it in variables
+var somevar = Breakfast;
+// pass it to functions
+somefunction(Breakfast);
+```
+
+but you are not initializing it here? why would you want to do this?
+
+instanciate a class
+```
+var breakfast = Breakfast();
+```
+
+> The idea behind object-oriented programming is encapsulating
+> behavior *and state* together
+
+> you can freely add properties onto objects
+```
+breakfast.meat = "sausage"
+```
+> assigning to a **field** creates it if it doesn't already
+> exist
+
+you can access a filed or method on a current object
+within the object with ```this```, just like ```self```
+
+the initializer method
+
+```
+class Breakfast {
+  init(meat, bread){
+      this.meat = meat;
+      this.bread = bread;
+  }
+  // ...
+}
+
+var morning = Breakfast("bacon", "toast");
+```
+
+what if you did not pass in the things?
+init boilerplate yuh
+
+#### Inheritance
+
+never liked inheritance
+
+you can inherit methods from multiple classes using
+```<``` just like in ruby
+
+> If you konw type thoery
+
+i dont, should I?
+
+```
+class Brunch < Breakfast {
+  drink() {
+      print("gulp")
+  }
+}
+```
+
+watchout because the Brunch also inherits the init
+method from Breakfast. What if you made your own init
+for Brunch??
+
+> Lox is not a **pure** object oriented language.
+> In a true OOP language every object is an instance
+> of a class, even primitive values like numbers and Booleans
+
+thats why i like ruby so much
+
+Lox primitive types have no methods or properties
+
+### The Standard Library
+
+thats about it, whats left is the **core** or **standard lib**
+
+> the set of functionality that is implemented directly in the interpreter and that all user-defined behavior is
+> built on top of
+
+Lox will just about have no std lib
+
+> If you wanted to turn Lox into an actual useful language,
+> the very first thing you hsould do is flesh this out
+
+* String manipulation
+* trigonometric functions
+* file I/O
+* networking
+* reading input from the user
+
+what is a programming language without its std lib?
+
+what about doing advent of code in Lox language?
+
+### Challenges
+
+```
+1. Write some sample Lox programs and run them
+Try to come up with edge case behavior I didn't specify here.
+Does it do what you expect? Why or why not?
+```
+
+making the things was a little difficult.
+
+First you have to install dart, luckily his machine was also
+a mac, so maybe thats why i had so little hickups, anyways i
+had to install the correct dart after installing a newer version
+that did not support something
+
+```
+The lower bound of "sdk: '>2.11.0 <3.0.0'" must be 2.12.0'
+or higher to enable null safety.
+
+The current Dart SDK (3.4.1) only supports null safety.
+```
+
+brew made things preetty simple
+
+```
+brew install dart@2.12
+
+# now you have to unlink the previously installed version
+
+brew unlink dart@3.4 && brew unlink dart@2.12 && brew link dart@2.12
+```
+
+lucky me the dart documentation on installing dart is very good
+
+also, making the binary and then moving them over here
+caused an issue, atleast with jlox
+
+```
+Error: Could not find or load main class com.craftinginterpreters.lox.Lox
+Caused by: java.lang.ClassNotFoundException: com.craftinginterpreters.lox.Lox
+```
+
+its not a one file binary like clox is,
+
+o wow, jlox is a shell script
+
+ill just use clox
+
+yeah, i was having all kinds of hichups when writing this
+bmi calculator lol, also writing with no syntax highlighting
+makes me feel like a wizard, could i write my own syntax highlighter?, you could use the C one, they hvae the same syntax
+
+there was a lot of stuff i took for granted like
+string interpolation and, the implicit conversion between
+numbers to string when print "your bmi: " user.bmi()
+
+```
+2. This informal introduction leaves a lot unspecified.
+List several open questions you have about the language's
+syntax and semantics. What do you think the answers should be?
+```
+
+if the language is so small, how easy would it be to go in
+there and change things? like, instead of comments being '//'
+could i change it to '#' ?
+
+what about other datastructures like list, hashmaps?
+
+i dont like how its inconsistent with how you declare
+a function and how you declare a method
+
+the ```fun``` is ommited when declaring a method, dont like it
+
+```
+3. Lox is a pretty tiny language. What eatures do you think
+it is missing that would make it annoying to use for
+real programs? (aside from std lib)
+```
+
+again string interpolation, no code editor support for lox
+
+also how do you convert *strings to numbers*, and
+*numbers to strings*? i guess this would have to be handled
+by the standard library
+
+wow this is alot of fun, i cant wait to make up my own language
+
+### DESIGN NOTE: EXPRESSIONS AND STATEMETNS

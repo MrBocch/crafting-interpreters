@@ -1,0 +1,52 @@
+
+// write some sample programs and run them
+
+// why does this return
+// [line 3] Error at '(': Expect '{' before class body ???
+// class Calculator() {
+// doing it all    ^ wrong here lol
+
+class Calculator {
+ 	init(weight, height){
+      this.weight = weight;
+      this.height = height;
+      this.bmi = this.bmi();
+   }
+
+   bmi(){
+    return this.weight / (this.height * this.height);
+   }
+
+    status() {
+    // there is no conversion between number and string
+    // print "Your bmi is: " + a.bmi();
+      if (this.bmi < 18.5) {
+        print "You are underweight";
+        return;
+      }
+      if (this.bmi <= 24.9) {
+        print("You are normal weight");
+        return;
+      }
+      if (this.bmi <= 29.9) {
+        print("You are overweight");
+        return;
+      } else {
+        print("DAYUM, you are OBESE");
+      }
+    }
+
+}
+
+var user = Calculator(60, 1.77);
+
+print "Your bmi is:";
+print user.bmi;
+
+print user.status();
+
+// why does this return "Operands must be numbers" ??
+//if (a.bmi < 18.5) {
+// because im passing in the method, not what bmi() returns
+
+// that was before i made the bmi field, and only had the method
