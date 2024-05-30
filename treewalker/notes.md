@@ -308,13 +308,28 @@ att-value: entry in symbol table?
 maybe i should reread, and try to really, understand what the code is doing
 
 i could write out all the code by hand
-but i wont really understand untill, i 
+but i wont really understand untill, i
 write my own, with out help
 
 fuck it, ill copy everything exactly
 why is it so diffucult to just import
 this enum file?
 
-javac -d com/../lox/*.java
+```javac -d com/../lox/*.java```
 
 ok got it to work compile errors
+
+### Lexical errors
+
+ok, the Lox.error() thing is cool
+
+> Note that we *keep scanning*
+
+> gives our users a better experience if we detect as many of those as possible in one go.
+
+yeah i understand, that would
+be very annoying, to play Syntax *Whac-A-Mole*
+
+this is so annoying. Maybe, i should not bother with writing word for word, but instead make my own version in a language i know? probably would learn alot more
+
+fuck it, lets do it 
