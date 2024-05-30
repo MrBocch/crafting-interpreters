@@ -300,3 +300,21 @@ Lexer: error: cannot find symbol
 this is kinda annoying tbh, i wont quite doe,
 
 also not a fun of all this, oop "clean code" type shit type shit
+
+so a **token** is a tuple, token : <token-name, att-value>,
+
+att-value: entry in symbol table?
+
+maybe i should reread, and try to really, understand what the code is doing
+
+i could write out all the code by hand
+but i wont really understand untill, i 
+write my own, with out help
+
+fuck it, ill copy everything exactly
+why is it so diffucult to just import
+this enum file?
+
+javac -d com/../lox/*.java
+
+ok got it to work compile errors

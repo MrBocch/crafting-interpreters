@@ -1,3 +1,5 @@
+package com.craftinginterpreters.lox;
+
 import java.io.IOException; // for throw execeptions
 import java.nio.charset.Charset; // for reading bytes in file
 import java.nio.file.Files; // import file class

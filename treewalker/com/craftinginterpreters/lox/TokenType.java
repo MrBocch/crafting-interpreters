@@ -1,3 +1,5 @@
+package com.craftinginterpreters.lox;
+
 enum TokenType {
     // Single-caracter tokens.
     LEFT_PAREN,
@@ -12,6 +14,7 @@ enum TokenType {
     SLASH,
     STAR,
 
+    // some of these are also only one character, why seperate then?
     // One or two character tokens
     BANG,
     BANG_EQUAL,

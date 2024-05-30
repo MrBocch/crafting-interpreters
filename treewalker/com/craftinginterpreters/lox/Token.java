@@ -1,3 +1,6 @@
+package com.craftinginterpreters.lox;
+
+
 class Token {
 
     // final means a constant variable
