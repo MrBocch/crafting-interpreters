@@ -1,0 +1,13 @@
+name: tree-walker
+version: 0.1.0
+
+authors:
+  - MrBocch <jorgealberto1436@gmail.com>
+
+targets:
+  tree-walker:
+    main: src/tree-walker.cr
+
+crystal: '>= 1.14.0'
+
+license: MIT
