@@ -25,6 +25,7 @@ class TreeWalker
     end
 
     file = File.read(path)
+    exit(65) if @had_error
   end
 
   private def run_prompt() : Nil
@@ -35,6 +36,7 @@ class TreeWalker
 
       break if line.empty?
       run(line)
+      @had_error = false
     end
   end
 
@@ -52,7 +54,7 @@ class TreeWalker
 
   private def report(line : Int32, where : String, message : String) : Nil
     puts("[line #{line}] Error#{where}: #{message}")
-    hadError = true
+    @had_error = true
   end
 end
 
