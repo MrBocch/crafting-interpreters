@@ -2,18 +2,22 @@
 # the hadError field, requires a global var
 # if you do this w/o OOP
 class TreeWalker
+  # @@var makes it static?
+  # dont see need to make it static if only one instance of the TreeWalker
+  @had_error : Bool = false
+
   def main() : Nil
     if ARGV.size > 1
       puts "Usage: jlox [script]"
       exit(64)
     elsif ARGV.size == 1
-      runFile(ARGV[0])
+      run_file(ARGV[0])
     else
-      runPrompt()
+      run_prompt()
     end
   end
 
-  private def runFile(path : String) : Nil
+  private def run_file(path : String) : Nil
 
     if !File.file?(path)
       puts "#{path} does not exist"
@@ -23,7 +27,7 @@ class TreeWalker
     file = File.read(path)
   end
 
-  private def runPrompt() : Nil
+  private def run_prompt() : Nil
     line : String
     while true
       print "> "
@@ -48,7 +52,7 @@ class TreeWalker
 
   private def report(line : Int32, where : String, message : String) : Nil
     puts("[line #{line}] Error#{where}: #{message}")
-    hadError : Bool = true
+    hadError = true
   end
 end
 
