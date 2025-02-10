@@ -11,14 +11,27 @@ class Scanner
   end
 
   def scan_tokens() : Array(Token)
-    a = [Token.new(TokenType::COMMA, "var", 1)]
-
+    tokens : Array(Token)
+    c : Char = advance()
     case c
-    when v1
+    when '(' then
     when v2
     else
       # default
     return a
+  end
+
+  private def addToken(type : TokenType) : Nil
+
+  end
+
+  private def advance() : Char
+    # not check if aoutof bounds?
+    c : Char = @source[current]
+    current += 1
+    # i never liked x++ , ++x, increments
+    # but its so unclear, sometimes
+    return c
   end
 
   private def is_at_end?() : Bool
