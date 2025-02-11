@@ -1,3 +1,4 @@
+require "./Scanner.cr"
 # i did not want to make a main class but
 # the hadError field, requires a global var
 # if you do this w/o OOP
@@ -25,6 +26,7 @@ class TreeWalker
     end
 
     file = File.read(path)
+    run(file)
     exit(65) if @had_error
   end
 
@@ -41,11 +43,11 @@ class TreeWalker
   end
 
   private def run(source : String) : Nil
-    # s = scanner.new
-    # tokens : Array(Token) = s.scanTokens()
-    # tokens.each do |tok|
-    #   puts tok
-    # end
+    s = Scanner.new(source)
+    tokens : Array(Token) = s.scan_tokens()
+    tokens.each do |tok|
+      p! tok
+    end
   end
 
   private def error(line : Int32, message : String) : Nil
