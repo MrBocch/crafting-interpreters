@@ -5,7 +5,7 @@ require "./Scanner.cr"
 class TreeWalker
   # @@var makes it static?
   # dont see need to make it static if only one instance of the TreeWalker
-  @had_error : Bool = false
+  @@had_error : Bool = false
 
   def main() : Nil
     if ARGV.size > 1
@@ -50,13 +50,15 @@ class TreeWalker
     end
   end
 
-  private def error(line : Int32, message : String) : Nil
+  def self.error(line : Int32, message : String) : Nil
     report(line, "", message)
   end
 
-  private def report(line : Int32, where : String, message : String) : Nil
+  # so public static methods cant call private methods because
+  # private methods are instance level, work around is to make both private/public and static
+  private def self.report(line : Int32, where : String, message : String) : Nil
     puts("[line #{line}] Error#{where}: #{message}")
-    @had_error = true
+    @@had_error = true
   end
 end
 

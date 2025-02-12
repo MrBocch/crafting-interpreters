@@ -1,3 +1,4 @@
+require "./TreeWalker.cr"
 require "./Token.cr"
 
 alias TT = TokenType
@@ -61,11 +62,7 @@ class Scanner
     when '\n'
       @line += 1
     else
-      # how do i call this thing ?
-      # TreeWalker.error("unexpected character")
-      # originall returns error and keeps going
-      puts "Error, #{@source[current]}"
-      exit(64)
+      TreeWalker.error(line, "Un expected character")
     end
   end
 
@@ -119,8 +116,8 @@ end
 # ===
 # current it would [==] [=] seperatly never thought of that
 # bad: [==] [==] [=]
-# test : String = "(-!=>=//{}()\n==="
-# s = Scanner.new(test)
-# s.scan_tokens().each do |t|
-  # p! t
-# end
+#test : String = "(-!=>=//{}()\n==="
+#s = Scanner.new(test)
+#s.scan_tokens().each do |t|
+  #p! t
+  #end
