@@ -1,4 +1,4 @@
-require "./TreeWalker.cr"
+require "./Lox.cr"
 require "./Token.cr"
 
 alias TT = TokenType
@@ -62,7 +62,7 @@ class Scanner
     when '\n'
       @line += 1
     else
-      TreeWalker.error(line, "Un expected character")
+      Lox.error(line, "Un expected character")
     end
   end
 
@@ -120,4 +120,4 @@ end
 #s = Scanner.new(test)
 #s.scan_tokens().each do |t|
   #p! t
-  #end
+#end

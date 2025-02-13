@@ -2,7 +2,7 @@ require "./Scanner.cr"
 # i did not want to make a main class but
 # the hadError field, requires a global var
 # if you do this w/o OOP
-class TreeWalker
+class Lox
   # @@var makes it static?
   # dont see need to make it static if only one instance of the TreeWalker
   @@had_error : Bool = false
@@ -62,5 +62,5 @@ class TreeWalker
   end
 end
 
-interpreter = TreeWalker.new()
+interpreter = Lox.new()
 interpreter.main()
