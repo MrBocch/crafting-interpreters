@@ -4,12 +4,11 @@ require "./Token.cr"
 alias TT = TokenType
 
 class Scanner
-
+  # does current being a UInt32 means that any jlox source code
+  # is limited by the size of current before it wraps backaround?
   property start   : UInt32 = 0
   property current : UInt32 = 0
   property line    : Int32  = 1
-  # crystal can feel so backwards at times, is skill issue?
-  # property tokens : Array(Token) = []
   property tokens = [] of Token
 
   def initialize(source : String) : Nil
@@ -65,11 +64,28 @@ class Scanner
       str()
     else
       if is_digit?(c)
-        number()
+        num()
       else
-        Lox.error(line, "Un expected character")
+        Lox.error(line, "Un expected '.' character")
       end
     end
+  end
+
+  private def num() : Nil
+    while is_digit?(peek())
+      advance()
+    end
+
+    # look for fractional part
+    if peek() == '.' && is_digit?(peek_next())
+      # consume the '.'
+      advance()
+      while is_digit?(peek())
+        advance()
+      end
+    end
+    lit = @source[@start...@current].to_f64
+    add_token(TT::NUMBER, lit)
   end
 
   private def str() : Nil
@@ -91,29 +107,11 @@ class Scanner
     add_token(TT::STRING, value)
   end
 
-  private def number() : Nil
-    # 15/2 should T(15), T(/) T(2) but it does not, why?
-    while is_digit?(peek())
-      advance()
-    end
-
-    # look for fractional part
-    if peek() == '.' && is_digit?(peek_next())
-      # consume the '.'
-      advance()
-      while is_digit?(peek())
-        advance()
-      end
-    end
-    lit = @source[@start...@current].to_f64
-    add_token(TT::NUMBER, lit)
-  end
-
   private def match?(expected : Char) : Bool
     if is_at_end?
       return false
     end
-    if @source[current] != expected
+    if @source[@current] != expected
       return false
     end
     @current += 1
@@ -138,13 +136,8 @@ class Scanner
     return c >= '0' && c <= '9'
   end
 
-  private def add_token(type : TokenType) : Nil
-    add_token(type, nil)
-  end
-
-  private def add_token(type : TokenType, literal : LiteralType) : Nil
-    text = @source[@start...@current]
-    tokens.push(Token.new(type, text, literal, line))
+  private def is_at_end?() : Bool
+    return @current >= @source.size
   end
 
   private def advance() : Char
@@ -153,12 +146,12 @@ class Scanner
     return c
   end
 
-  private def is_at_end?() : Bool
-    return @current >= @source.size
+  private def add_token(type : TokenType) : Nil
+    add_token(type, nil)
+  end
+
+  private def add_token(type : TokenType, literal : LiteralType) : Nil
+    text = @source[@start...@current]
+    tokens.push(Token.new(type, text, literal, line))
   end
 end
-
-# over counting, imagine this
-# ===
-# current it would [==] [=] seperatly never thought of that
-# bad: [==] [==] [=]
