@@ -18,7 +18,7 @@ class Scanner
 
   def scan_tokens() : Array(Token)
     while !is_at_end?
-      start = current
+      @start = @current
       scan_token()
     end
 
@@ -64,7 +64,11 @@ class Scanner
     when '"'
       str()
     else
-      Lox.error(line, "Un expected character")
+      if is_digit?(c)
+        number()
+      else
+        Lox.error(line, "Un expected character")
+      end
     end
   end
 
@@ -83,8 +87,26 @@ class Scanner
     advance()
 
     # trim surrounding quotes
-    value : String = @source[start+1, current-1]
+    value : String = @source[@start+1, @current-1]
     add_token(TT::STRING, value)
+  end
+
+  private def number() : Nil
+    # 15/2 should T(15), T(/) T(2) but it does not, why?
+    while is_digit?(peek())
+      advance()
+    end
+
+    # look for fractional part
+    if peek() == '.' && is_digit?(peek_next())
+      # consume the '.'
+      advance()
+      while is_digit?(peek())
+        advance()
+      end
+    end
+    lit = @source[@start...@current].to_f64
+    add_token(TT::NUMBER, lit)
   end
 
   private def match?(expected : Char) : Bool
@@ -102,7 +124,18 @@ class Scanner
     if is_at_end?()
       return '\0'
     end
-    return @source[current]
+    return @source[@current]
+  end
+
+  private def peek_next() : Char
+    if @current+1 >= @source.size
+      return '\0'
+    end
+    return @source[@current+1]
+  end
+
+  private def is_digit?(c : Char) : Bool
+    return c >= '0' && c <= '9'
   end
 
   private def add_token(type : TokenType) : Nil
@@ -110,12 +143,12 @@ class Scanner
   end
 
   private def add_token(type : TokenType, literal : LiteralType) : Nil
-    text = @source[start...current]
+    text = @source[@start...@current]
     tokens.push(Token.new(type, text, literal, line))
   end
 
   private def advance() : Char
-    c : Char = @source[current]
+    c : Char = @source[@current]
     @current += 1
     return c
   end
