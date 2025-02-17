@@ -7,6 +7,9 @@ ccraftinginterpreters
 clox
 jlox
 
+# compiler stuff
 *.o
-
 *.class
+
+# ignore test.jlox
+test.jlox

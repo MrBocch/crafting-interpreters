@@ -22,7 +22,7 @@ class Scanner
       scan_token()
     end
 
-    tokens.push(Token.new(TT::EOF, "", line))
+    tokens.push(Token.new(TT::EOF, "", nil, line))
     return tokens
   end
 
@@ -61,9 +61,30 @@ class Scanner
     when ' ', '\r', '\t'
     when '\n'
       @line += 1
+    when '"'
+      str()
     else
       Lox.error(line, "Un expected character")
     end
+  end
+
+  private def str() : Nil
+    while (peek() != '"' && !is_at_end?())
+      @line += 1 if peek() == '\n'
+      advance()
+    end
+
+    if is_at_end?()
+      Lox.error(line, "Unterminated string")
+      return
+    end
+
+    # closing '"'
+    advance()
+
+    # trim surrounding quotes
+    value : String = @source[start+1, current-1]
+    add_token(TT::STRING, value)
   end
 
   private def match?(expected : Char) : Bool
@@ -85,29 +106,21 @@ class Scanner
   end
 
   private def add_token(type : TokenType) : Nil
-    # dont know what the object literal stuff is about
-    text = @source[start...current]
-    tokens.push(Token.new(type, text, line))
+    add_token(type, nil)
   end
 
+  private def add_token(type : TokenType, literal : LiteralType) : Nil
+    text = @source[start...current]
+    tokens.push(Token.new(type, text, literal, line))
+  end
 
   private def advance() : Char
-    # not check if aoutof bounds?
     c : Char = @source[current]
     @current += 1
-    # i never liked x++ , ++x, increments
-    # but its so unclear, sometimes
     return c
   end
 
   private def is_at_end?() : Bool
-    # weird that there is no issues
-    # when current and source.size are different types
-    # what exactly is it doing?
-    # https://crystal-lang.org/api/1.15.1/UInt32.html#%3E%3D%28other%3AInt32%29%3ABool-instance-method
-    # String.size : Int32 , its interesting
-    # a string could only be of size 0 to length
-    # why not use unsigned integer?
     return @current >= @source.size
   end
 end
@@ -116,8 +129,3 @@ end
 # ===
 # current it would [==] [=] seperatly never thought of that
 # bad: [==] [==] [=]
-#test : String = "(-!=>=//{}()\n==="
-#s = Scanner.new(test)
-#s.scan_tokens().each do |t|
-  #p! t
-#end

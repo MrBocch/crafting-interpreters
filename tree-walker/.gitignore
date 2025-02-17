@@ -1,6 +1,6 @@
+# crystal stuff
 /docs/
 /lib/
 /bin/
 /.shards/
 *.dwarf
-.DS_Store
