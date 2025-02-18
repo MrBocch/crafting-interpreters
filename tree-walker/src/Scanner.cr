@@ -11,6 +11,14 @@ class Scanner
   property line    : Int32  = 1
   property tokens = [] of Token
 
+  # crystal can feel so backwards sometimes
+  # why cant keywords : Hash(String, TT) ?
+  # property keywords = Hash(String, TT).new()
+  # check this out
+  property keywords = {
+    "and" => TT::AND
+  } of String => TT
+
   def initialize(source : String) : Nil
     @source = source
   end
@@ -65,10 +73,19 @@ class Scanner
     else
       if is_digit?(c)
         num()
+      elsif is_alpha?(c)
+        identifier()
       else
         Lox.error(line, "Un expected '.' character")
       end
     end
+  end
+
+  private def identifier() : Nil
+    while is_alpha_numeric?(peek())
+      advance()
+    end
+    add_token(TT::IDENTIFIER)
   end
 
   private def num() : Nil
@@ -132,8 +149,21 @@ class Scanner
     return @source[@current+1]
   end
 
+  private def is_alpha?(c : Char) : Bool
+  # return c.ascii_letter? || c == '_'
+  return (c >= 'a' && c <= 'z') ||
+         (c >= 'A' && c <= 'Z') ||
+         c == '_'
+  end
+
   private def is_digit?(c : Char) : Bool
+    # return c.ascii_number?
     return c >= '0' && c <= '9'
+  end
+
+  private def is_alpha_numeric?(c : Char) : Bool
+    # return c.ascii_alphanumeric?
+    return is_alpha?(c) || is_digit?(c)
   end
 
   private def is_at_end?() : Bool
