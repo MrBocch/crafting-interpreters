@@ -1,17 +1,11 @@
 # tree-walker
 
-Jlox tree walker implementation in crystal
+lox tree walker implementation in crystal
 
-## Installation
-
-TODO: Write installation instructions here
-
-## Usage
-
-### Run
+## Run
 
 crystal run src/tree-walker.cr
 
-## Development
+## Crsytal Style Guide
 
-TODO: Write development instructions here
+[style guide](https://crystal-lang.org/reference/1.15/conventions/coding_style.html)
