@@ -8,13 +8,13 @@ class Lox
   @@had_error : Bool = false
 
   def main() : Nil
-    if ARGV.size > 1
-      puts "Usage: jlox [script]"
-      exit(64)
+    if ARGV.empty?
+      run_prompt()
     elsif ARGV.size == 1
       run_file(ARGV[0])
     else
-      run_prompt()
+      puts "Usage: jlox [script]"
+      exit(64)
     end
   end
 

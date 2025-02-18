@@ -16,8 +16,24 @@ class Scanner
   # property keywords = Hash(String, TT).new()
   # check this out
   property keywords = {
-    "and" => TT::AND
-  } of String => TT
+    "and"    => TT::AND,
+    "class"  => TT::CLASS,
+    "else"   => TT::ELSE,
+    "false"  => TT::FALSE,
+    "true"   => TT::TRUE,
+    "for"    => TT::FOR,
+    "fun"    => TT::FUN,
+    "if"     => TT::IF,
+    "nil"    => TT::NIL,
+    "or"     => TT::OR,
+    "print"  => TT::PRINT,
+    "return" => TT::RETURN,
+    "super"  => TT::SUPER,
+    "this"   => TT::THIS,
+    "true"   => TT::TRUE,
+    "var"    => TT::VAR,
+    "while"  => TT::WHILE
+  }of String => TokenType
 
   def initialize(source : String) : Nil
     @source = source
@@ -85,7 +101,9 @@ class Scanner
     while is_alpha_numeric?(peek())
       advance()
     end
-    add_token(TT::IDENTIFIER)
+    text : String = @source[@start, @current]
+    type : TT = @keywords.has_key?(text) ? @keywords[text] : TT::IDENTIFIER
+    add_token(type)
   end
 
   private def num() : Nil
@@ -150,20 +168,20 @@ class Scanner
   end
 
   private def is_alpha?(c : Char) : Bool
-  # return c.ascii_letter? || c == '_'
-  return (c >= 'a' && c <= 'z') ||
-         (c >= 'A' && c <= 'Z') ||
-         c == '_'
+  return c.ascii_letter? || c == '_'
+  # return (c >= 'a' && c <= 'z') ||
+          #(c >= 'A' && c <= 'Z') ||
+          # c == '_'
   end
 
   private def is_digit?(c : Char) : Bool
-    # return c.ascii_number?
-    return c >= '0' && c <= '9'
+    return c.ascii_number?
+    #return c >= '0' && c <= '9'
   end
 
   private def is_alpha_numeric?(c : Char) : Bool
-    # return c.ascii_alphanumeric?
-    return is_alpha?(c) || is_digit?(c)
+    return c.ascii_alphanumeric?
+    # return is_alpha?(c) || is_digit?(c)
   end
 
   private def is_at_end?() : Bool
