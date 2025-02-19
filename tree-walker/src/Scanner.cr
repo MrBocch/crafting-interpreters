@@ -78,6 +78,9 @@ class Scanner
         while (peek() != '\n' && !is_at_end?())
           advance()
         end
+      elsif match?('*')
+        multi_line_comment()
+        advance() # if does not then it would recognice the first '/' as a TT:SLASH why?
       else
         add_token(TT::SLASH)
       end
@@ -92,7 +95,7 @@ class Scanner
       elsif is_alpha?(c)
         identifier()
       else
-        Lox.error(line, "Un expected '.' character")
+        Lox.error(line, "Un expected #{c} character")
       end
     end
   end
@@ -140,6 +143,30 @@ class Scanner
     # trim surrounding quotes
     value : String = @source[@start+1, @current-1]
     add_token(TT::STRING, value)
+  end
+
+  private def multi_line_comment() : Nil
+    # works perfectly when you close comments corretly
+    # when they dont, you need to exit gracefully, without letting a method try to access outside array
+    level : Int32 = 0
+    begin_coment_line : Int32 = @line
+    while !is_at_end?()
+      case peek()
+      when '*'
+        # this is a case were if compiler were more strict about comparing different types
+        # would have saved me time
+        # level -= 1 if peek_next() == "/"
+        level -= 1 if peek_next() == '/'
+      when '/'
+        level += 1 if peek_next() == '*'
+      when '\n'
+        @line += 1
+      else
+      end
+      advance() # i keep forgeting to advance lool
+      return if level < 0
+    end
+    Lox.error(begin_coment_line, "Forgot to close comment beggining here")
   end
 
   private def match?(expected : Char) : Bool
