@@ -80,7 +80,8 @@ class Scanner
         end
       elsif match?('*')
         multi_line_comment()
-        advance() # if does not then it would recognice the first '/' as a TT:SLASH why?
+        @current += 1 # i should not have to do this, its so bad
+        # findout why it would not pass over the '/'
       else
         add_token(TT::SLASH)
       end
