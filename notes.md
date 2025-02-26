@@ -72,3 +72,72 @@ Looking at lua's BNF
 there is alot more rules than
 i had expected AND Lua is a simple
 language with a simple syntax
+
+Everyother grammer example i found
+were for a simple arithmetic calculator
+
+```
+expression     → literal
+               | unary
+               | binary
+               | grouping ;
+
+literal        → NUMBER | STRING | "true" | "false" | "nil" ;
+grouping       → "(" expression ")" ;
+unary          → ( "-" | "!" ) expression ;
+binary         → expression operator expression ;
+operator       → "==" | "!=" | "<" | "<=" | ">" | ">="
+               | "+"  | "-"  | "*" | "/" ;
+```
+
+so for example
+``` 1 + / 3? ```
+is not a string that can be produced because
+
+binary -> expresion op expresion
+<1 = literal> <+ = operator> </ = operator>
+its doing
+literal op op, so its not valid
+it does not fit in grammer
+
+you can note BNF in BNF
+
+syntax diagram alternative to BNF?
+syntax diagrams reminds me of automatons
+
+bnf does not note how arithmetic
+is evaluated
+
+the code bits
+
+he will define a class for each
+type of (rule?)
+
+so its very tedius to write this out
+in java he resorts to writing a
+helper wich would write the code
+for him.
+
+idk if it makes sense to do so in crystal
+its not so verbose
+
+so what exactly is going to be
+doing the evaluation of expresions
+
+*expression problem*
+
+the visitor pattern, i wonder if he
+mentions this in his other book
+Game Programming Patterns
+
+> The Visitor pattern is really
+> about approximating the functional
+> style within an OOP language.
+
+this is very confusing,
+i think i rather have to rewrite
+everything when adding a new type
+or function
+
+i really dont like this style
+or java
